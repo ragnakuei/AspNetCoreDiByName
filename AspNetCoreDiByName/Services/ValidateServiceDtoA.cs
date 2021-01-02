@@ -3,36 +3,31 @@ using AspNetCoreDiByName.Models;
 
 namespace AspNetCoreDiByName.Services
 {
-    public class ValidateServiceDtoA : IValidateService
+    public class ValidateServiceDtoA : ValidateServiceBase, IValidateService
     {
         public Dictionary<string, IList<string>> Validate(object model)
         {
-            var result = new Dictionary<string, IList<string>>();
-
-            if (model is not DtoA dto)
+            if (model is DtoA dto)
             {
-                return result;
+                ValidateName(dto.Name);
             }
 
-            ValidateName(result, dto);
-
-            return result;
+            return ModelState;
         }
 
-        private static void ValidateName(Dictionary<string, IList<string>> result, DtoA dto)
+        private void ValidateName(string name)
         {
-            var nameErrorMessages = new List<string>();
-            result.Add(nameof(DtoA.Name), nameErrorMessages);
+            var propertyName = nameof(DtoA.Name);
 
-            if (string.IsNullOrWhiteSpace(dto.Name))
+            if (string.IsNullOrWhiteSpace(name))
             {
-                nameErrorMessages.Add("名稱不可以為空");
+                AddModelState(propertyName, "名稱不可以為空");
                 return;
             }
 
-            if (dto.Name.Length < 2)
+            if (name.Length < 2)
             {
-                nameErrorMessages.Add("名稱長度要大於等於 2 個字");
+                AddModelState(propertyName, "名稱長度要大於等於 2 個字");
             }
         }
     }

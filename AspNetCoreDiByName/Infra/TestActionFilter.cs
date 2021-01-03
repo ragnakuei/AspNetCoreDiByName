@@ -28,7 +28,7 @@ namespace AspNetCoreDiByName.Infra
             {
                 var validateServiceType = _typeMapping.GetValueOrDefault(argument.Value.GetType());
 
-                IValidateService validateService = _serviceProvider.GetService(validateServiceType) as IValidateService;
+                var validateService = _serviceProvider.GetService(validateServiceType) as IValidateService;
 
                 validateService.Validate(argument.Value);
             }
